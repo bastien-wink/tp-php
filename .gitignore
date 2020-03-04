@@ -1,0 +1,6 @@
+.idea
+.env
+.project
+.docker-sync
+.DS_Store
+.php_cs.cache
