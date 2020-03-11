@@ -14,53 +14,30 @@
 <form method="post">
     <input type="number" step="any" name="number1"
            value="<?php echo isset($_POST['number1']) ? $_POST['number1'] : '' ?>">
-    <div>
-        <label>
-            <input type="radio" name="operator" value="+"
-                <?php echo (isset($_POST['operator']) && $_POST['operator'] === "+") ? 'checked' : '' ?>
-            />
-            + <br/>
-        </label>
-        <label>
-            <input type="radio" name="operator" value="-"
-                <?php echo (isset($_POST['operator']) && $_POST['operator'] === "-") ? 'checked' : '' ?>
-            />
-            - <br/>
-        </label>
-        <label>
-            <input type="radio" name="operator" value="*"
-                <?php echo (isset($_POST['operator']) && $_POST['operator'] === "*") ? 'checked' : '' ?>
-            />
-            * <br/>
-        </label>
-        <label>
-            <input type="radio" name="operator" value="/"
-                <?php echo (isset($_POST['operator']) && $_POST['operator'] === "/") ? 'checked' : '' ?>
-            />
-            / <br/>
-        </label>
-    </div>
 
     <input type="number" step="any" name="number2"
            value="<?php echo isset($_POST['number2']) ? $_POST['number2'] : '' ?>">
 
-    <input type="submit">
+    <input type="submit" name="operatorButton" value="+">
+    <input type="submit" name="operatorButton" value="-">
+    <input type="submit" name="operatorButton" value="*">
+    <input type="submit" name="operatorButton" value="/">
 </form>
 
 <?php
 
-if (isset($_POST['number1']) && isset($_POST['number2']) && isset($_POST['operator'])) {
+if (isset($_POST['number1']) && isset($_POST['number2']) && isset($_POST['operatorButton'])) {
 
-    if ($_POST['operator'] === "+") {
-        echo $_POST['number1'] + $_POST['number2'];
-    } elseif ($_POST['operator'] === "-") {
-        echo $_POST['number1'] - $_POST['number2'];
-    } elseif ($_POST['operator'] === "*") {
-        echo $_POST['number1'] * $_POST['number2'];
-    } elseif ($_POST['operator'] === "/" && ($_POST['number1'] == 0 || $_POST['number2'] == 0)) {
+    if ($_POST['operatorButton'] === "+") {
+        echo $_POST['number1']."+".$_POST['number2']." = ".$_POST['number1'] + $_POST['number2'];
+    } elseif ($_POST['operatorButton'] === "-") {
+        echo $_POST['number1']."-".$_POST['number2']." = ".$_POST['number1'] - $_POST['number2'];
+    } elseif ($_POST['operatorButton'] === "*") {
+        echo $_POST['number1']."*".$_POST['number2']." = ".$_POST['number1'] * $_POST['number2'];
+    } elseif ($_POST['operatorButton'] === "/" && ($_POST['number1'] == 0 || $_POST['number2'] == 0)) {
         echo 'Division par zero impossible';
-    } elseif ($_POST['operator'] === "/") {
-        echo $_POST['number1'] / $_POST['number2'];
+    } elseif ($_POST['operatorButton'] === "/") {
+        echo $_POST['number1']."/".$_POST['number2']." = ".$_POST['number1'] / $_POST['number2'];
     }
 
 }
