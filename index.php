@@ -5,10 +5,10 @@
     <title>Titre de la page</title>
 </head>
 <body>
+
 <?php
 
 ?>
-
 
 </body>
 </html>
