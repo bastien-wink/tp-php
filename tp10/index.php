@@ -1,15 +1,8 @@
-<!doctype html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title>Titre de la page</title>
-</head>
-<body>
-
 <?php
 
 require_once 'AbstractVehicule.php';
 require_once 'Car.php';
+
 
 $clio = new Car(40, 120);
 $clio
@@ -23,6 +16,3 @@ $clio
 echo $clio->getFuel() ;
 
 ?>
-
-</body>
-</html>
