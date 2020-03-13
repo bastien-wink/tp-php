@@ -21,17 +21,45 @@ if (isset($_POST['title']) && isset($_POST['rating'])) {
     $insertionSuccess = $preparedQuery->execute();
 }
 
-$query = $pdo->query('select * from movie');
+//if(isset($_GET['orderBy']) && $_GET['orderBy'] === 'rating'){
+//    $query = $pdo->query('select * from movie order by rating asc');
+//}else{
+//    $query = $pdo->query('select * from movie order by title asc');
+//}
+
+if (
+    isset($_GET['orderBy'])
+    && (
+        $_GET['orderBy'] == 'rating' || $_GET['orderBy'] == 'title'
+    )
+) {
+
+    $sort = 'asc';
+    if (isset($_GET['desc']) && $_GET['desc'] === 'true') {
+        $sort = 'desc';
+    }
+
+    $query = $pdo->query('select * from movie order by '.$_GET['orderBy'].' '.$sort);
+} else {
+    $query = $pdo->query('select * from movie order by title asc');
+}
+
+
+
 $movies = $query->fetchAll();
 
 ?><!doctype html>
 <html lang="fr">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="utf-8">
     <title>Mes films</title>
+
+    <!-- Bootsrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
+<body class="container">
 <hr>
 
 <h1>Mes films</h1>
@@ -44,15 +72,11 @@ if (isset($insertionSuccess) && $insertionSuccess === true) {
 
 ?>
 
-<?php
-var_dump($movies);
-?>
-
-<table>
-    <thead>
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
-        <th>Titre</th>
-        <th>Note</th>
+        <th>Titre <a href="?orderBy=title">↑</a> <a href="?orderBy=title&desc">↓</a></th>
+        <th><a href="?orderBy=rating">Note</a></th>
         <th>Date</th>
     </tr>
     </thead>
@@ -78,24 +102,19 @@ var_dump($movies);
 <form method="post">
     <h2>Ajouter</h2>
 
-    <div>
-        <label>
-            Nom du film : <input type="text" name="title">
-        </label>
+    <div class="form-group">
+        <input placeholder="Nom du film" class="form-control" type="text" name="title" id="title">
     </div>
 
-    <div>
-        <label>
-            Note: <input type="number" step="0.01" min="0" max="10" name="rating">
-        </label>
+    <div class="form-group">
+        <input placeholder="Note" class="form-control" type="number" step="0.01" min="0" max="10" name="rating" id="rating">
     </div>
 
-    <div>
-        <input type="submit" value="Envoyer">
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="Envoyer">
     </div>
 
 </form>
-
 
 </body>
 </html>
