@@ -1,17 +1,23 @@
 <?php
 
 try {
-    $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC];
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+    ];
     $pdo = new PDO('mysql:host=127.0.0.1;dbname=tpMovies', 'root', null, $options);
 } catch (PDOException $e) {
     echo "There is some problem in connection: ".$e->getMessage();
 }
 
 if (isset($_POST['title']) && isset($_POST['rating'])) {
-    $sql = "INSERT INTO movie (title,rating) VALUES (:varTitle, :varRating)";
+    $sql = "INSERT INTO movie (title,rating,creationDate) VALUES (:varTitle, :varRating, :varCreationDate)";
     $preparedQuery = $pdo->prepare($sql);
     $preparedQuery->bindValue(':varTitle', $_POST['title']);
     $preparedQuery->bindValue(':varRating', $_POST['rating']);
+    $dateNow = new DateTime('now');
+    $preparedQuery->bindValue(':varCreationDate', $dateNow->format('Y-m-d H:i:s'));
     $insertionSuccess = $preparedQuery->execute();
 }
 
@@ -38,20 +44,19 @@ if (isset($insertionSuccess) && $insertionSuccess === true) {
 
 ?>
 
+<?php
+var_dump($movies);
+?>
 
 <table>
     <thead>
     <tr>
         <th>Titre</th>
         <th>Note</th>
+        <th>Date</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>Le parrain</td>
-        <td>9.2</td>
-    </tr>
-
 
     <?php
 
@@ -59,6 +64,7 @@ if (isset($insertionSuccess) && $insertionSuccess === true) {
         echo '<tr>
                 <td>'.$movie['title'].'</td>
                 <td>'.$movie['rating'].'</td>
+                <td>'.$movie['creationDate'].'</td>
               </tr>';
     }
 
