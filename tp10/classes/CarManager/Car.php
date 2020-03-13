@@ -1,6 +1,8 @@
 <?php
 
-class Car extends AbstractVehicule
+namespace BastienCorp\CarManager;
+
+class Noms_Extremement_Long extends AbstractVehicule
 {
     // Fuel est en %
     private $fuel;
