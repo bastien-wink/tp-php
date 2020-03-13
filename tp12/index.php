@@ -7,6 +7,14 @@ try {
     echo "There is some problem in connection: ".$e->getMessage();
 }
 
+if (isset($_POST['title']) && isset($_POST['rating'])) {
+    $sql = "INSERT INTO movie (title,rating) VALUES (:varTitle, :varRating)";
+    $preparedQuery = $pdo->prepare($sql);
+    $preparedQuery->bindValue(':varTitle', $_POST['title']);
+    $preparedQuery->bindValue(':varRating', $_POST['rating']);
+    $insertionSuccess = $preparedQuery->execute();
+}
+
 $query = $pdo->query('select * from movie');
 $movies = $query->fetchAll();
 
@@ -18,9 +26,18 @@ $movies = $query->fetchAll();
     <meta charset="utf-8">
     <title>Mes films</title>
 </head>
-<body>
+<hr>
 
 <h1>Mes films</h1>
+
+<?php
+
+if (isset($insertionSuccess) && $insertionSuccess === true) {
+    echo "<div>Insertion réussie</div>";
+}
+
+?>
+
 
 <table>
     <thead>
@@ -47,9 +64,32 @@ $movies = $query->fetchAll();
 
     ?>
 
-
     </tbody>
 </table>
+
+<hr>
+
+<form method="post">
+    <h2>Ajouter</h2>
+
+    <div>
+        <label>
+            Nom du film : <input type="text" name="title">
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Note: <input type="number" step="0.01" min="0" max="10" name="rating">
+        </label>
+    </div>
+
+    <div>
+        <input type="submit" value="Envoyer">
+    </div>
+
+</form>
+
 
 </body>
 </html>
